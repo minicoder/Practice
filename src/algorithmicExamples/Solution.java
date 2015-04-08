@@ -53,7 +53,7 @@ public class Solution {
 		//System.out.println(isPangram(scan.nextLine()));
 		
 		//vmware - findNextRepeated word in sentence
-		System.out.println(findFirstRepeatedWord(scan.nextLine()));
+		//System.out.println(findFirstRepeatedWord(scan.nextLine()));
 		
 		//4. Anagrams
 		
@@ -124,8 +124,32 @@ public class Solution {
 //		int numbers = scan.nextInt();
 //		printFizzBuzz(numbers);
 		
+		//9. least common prefix
+		String[] str = {"abcababababc","abcabbab","babdadb"};
+		System.out.println(longestCommonPrefix(str));
+		
 	}
 	
+	// Pattern matching
+	public static String longestCommonPrefix(String[] strings) {
+	    if (strings.length == 0) {
+	        return "";   // Or maybe return null?
+	    }
+
+	    for (int prefixLen = 0; prefixLen < strings[0].length(); prefixLen++) {
+	        char c = strings[0].charAt(prefixLen);
+	        for (int i = 1; i < strings.length; i++) {
+	            if ( prefixLen >= strings[i].length() ||
+	                 strings[i].charAt(prefixLen) != c ) {
+	                // Mismatch found
+	                return strings[i].substring(0, prefixLen);
+	            }
+	        }
+	    }
+	    return strings[0];
+	}
+	
+	//Use KMP for pattern matching instead of for loop
 	public static String findFirstRepeatedWord(String input) {
 		//Invalid escape sequence (valid ones are  \b  \t  \n  \f  \r  \"  \'  \\ )
 		String str = input.replaceAll("\t,;-.", " ");
