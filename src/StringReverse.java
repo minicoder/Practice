@@ -13,7 +13,6 @@ public class StringReverse {
 		
 		//2nd way
 		StringBuffer str = new StringBuffer();
-		StringBuilder strBuilder;
 		String[] split = src.split(" ");
 		System.out.println("Length: "+split.length);
 		for(String s : split) {
@@ -21,7 +20,7 @@ public class StringReverse {
 		}
 
 		return str.toString();
-		
+//		
 
 		
 		//3rd way
@@ -35,7 +34,7 @@ public class StringReverse {
 
 		//String newStr = src.substring(1) + src.charAt(0);
 		//return newStr;
-//		return reverseString(src.substring(1)) + src.charAt(0);
+		//return reverseString(src.substring(1)) + src.charAt(0);
 	}
 
 }

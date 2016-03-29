@@ -23,6 +23,7 @@ public class StackImpl extends ArrayList{
 	public static void main(String[] args) throws SAXException, JAXBException {
 		// TODO Auto-generated method stub
 		Stack st = new Stack();
+		
 		List<String> strList = new ArrayList<String>();
 		strList.add("Hi");
 		strList.add("There");
@@ -46,6 +47,10 @@ public class StackImpl extends ArrayList{
 		}
 		System.out.println("Map after: "+map.size());
 		
+		List <String> l1 = new ArrayList<String>();
+		List<Integer> l2 = new ArrayList<Integer>();
+		System.out.println(l1.getClass() == l2.getClass());
+		
 		//		st.push(2);
 //		System.out.println(st.pop());
 //		System.out.println(st.peek());
@@ -56,3 +61,5 @@ public class StackImpl extends ArrayList{
 	//pop --> size() of map, get last element from size and remove it using Iterator 
 
 }
+
+

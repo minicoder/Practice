@@ -14,6 +14,8 @@ public class Power {
 		double result = power.pow(base, exp);
 		System.out.println("Result: "+result);
 	}
+	
+	//2^0=1, 2^1=2, 2^-1 = 
 
 	public double pow(double a, int b) {
 		if(b == 0) return 1;
@@ -28,6 +30,12 @@ public class Power {
 		else {
 			int res = b * -1;
 			return 1/(pow(a,res));
+			//1/pow(2,1) --> res = pow(2,0)*2 --> 1*2 = 2 --> 1/2 == 0.5
+			//|--------------------------------------------|
+			//1/pow(4,2) --> res = pow(4,1)*4 --> pow(4,1)*4 --> 4*4 = 16
+			//1/16 == 0.0625
+			//|--------------------------------------------|
+			
 		}
 
 	}

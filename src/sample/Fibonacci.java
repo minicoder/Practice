@@ -1,9 +1,10 @@
 package sample;
 
 //O(log n)
+// 1/2,1,2,3,5,8,13...
 public class Fibonacci {
 	public static void main(String[] args) {
-		System.out.println("Iter Fib:"+Fibonacci.iterativeFib(5));
+		System.out.println("Iter Fib:"+Fibonacci.iterativeFib(2));
 		System.out.println("Recursive Fib:"+Fibonacci.recursiveFib(5));
 
 	}

@@ -19,7 +19,7 @@ public class FindDuplicates {
 		numbers.add(30);
 		numbers.add(25);
 		
-		findIntDups(numbers);
+		//findIntDups(numbers);
 		
 		findWordDups(args);
 	}
@@ -53,11 +53,10 @@ public class FindDuplicates {
 	}
 	
 	private static void findWordDups(String[] str){
-		Lock lock = new Lock();
 		Set<String> unique = new HashSet<String>();
 		Set<String> dups = new HashSet<String>();
 		for(String a : str){
-			System.out.print(a);
+			System.out.print(a +" ");
 			if(!unique.add(a))
 				dups.add(a);
 		}
