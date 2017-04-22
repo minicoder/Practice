@@ -15,7 +15,7 @@ public class Power {
 		System.out.println("Result: "+result);
 	}
 	
-	//2^0=1, 2^1=2, 2^-1 = 
+	//2^0=1, 2^1=2, 2^4=pow(2*2*2*2),2^-1 =
 
 	public double pow(double a, int b) {
 		if(b == 0) return 1;
@@ -23,8 +23,7 @@ public class Power {
 			return a;
 		}
 		if(b > 0) {
-			double result = pow(a,b-1)* a;
-			return result;
+			return pow(a,b-1)* a;
 		}
 			
 		else {
