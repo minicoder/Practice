@@ -12,11 +12,11 @@ public class StringReverse {
 		//String str = new StringBuffer(src).reverse().toString();
 		
 		//2nd way
-		StringBuffer str = new StringBuffer();
+		StringBuilder str = new StringBuilder();
 		String[] split = src.split(" ");
 		System.out.println("Length: "+split.length);
 		for(String s : split) {
-			str.append(new StringBuffer(s).reverse().toString() +" ");
+			str.append(new StringBuffer(s).reverse().toString()).append(" ");
 		}
 
 		return str.toString();

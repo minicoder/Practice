@@ -55,9 +55,6 @@ public class Palindrome {
 		for(int i = len-1 ; i >=0 ; i--){
 			reverse = reverse + str.charAt(i);
 		}
-		if(reverse.equalsIgnoreCase(str)) 
-			return true;
-		else
-			return false;
+		return reverse.equalsIgnoreCase(str);
 	}
 }
