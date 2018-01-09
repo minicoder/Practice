@@ -87,7 +87,7 @@ public class TrieExample implements Vocabulary {
 
 	/**
 	 * Searches for a string represented as indices in this trie, 
-	 * @param s
+	 * @param
 	 * @return
 	 */
 	public boolean contains(byte[] indices, int offset, int len) {
@@ -102,7 +102,7 @@ public class TrieExample implements Vocabulary {
 	
 	/**
 	 * Searches for a string prefix represented as indices in this trie
-	 * @param s
+	 * @param
 	 * @return
 	 */
 	public boolean isPrefix(byte[] indices, int offset, int len) {
@@ -117,7 +117,7 @@ public class TrieExample implements Vocabulary {
 
 	/**
 	 * Returns the node corresponding to the string represented as indices
-	 * @param s
+	 * @param
 	 * @return
 	 */
 	public TrieExample getNode(byte[] indices, int offset, int len) {
