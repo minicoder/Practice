@@ -28,7 +28,7 @@ public class FindDuplicates {
 		//using HashSet - doesnt maintain order
 		Set<Integer> uniqueInt = new HashSet<Integer>();
 		Set<Integer> dupInt = new HashSet<Integer>();
-	
+
 		for(Integer o : numbers){
 			System.out.print(o+" ");
 			if(!uniqueInt.add(o))

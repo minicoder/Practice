@@ -7,7 +7,7 @@ public class Palindrome {
 
 	public static void main(String[] args) {
 		Palindrome pal = new Palindrome();
-		System.out.println(pal.isPalindrome("malayalam"));
+		System.out.println(pal.isPalindrome("A man, a plan, a canal: Panama"));
 		
 //		String original, reverse="";
 //	      Scanner in = new Scanner(System.in);
@@ -49,12 +49,14 @@ public class Palindrome {
 //		return (mismatches == 0);
 //	}
 	
-	public boolean isPalindrome(String str) {		
-		int len = str.length();
+	public boolean isPalindrome(String str) {
+		String cleanString = str.replaceAll("[^a-zA-Z0-9]", "");
+		int len = cleanString.length();
 		String reverse = "";
+
 		for(int i = len-1 ; i >=0 ; i--){
-			reverse = reverse + str.charAt(i);
+			reverse = reverse + cleanString.charAt(i);
 		}
-		return reverse.equalsIgnoreCase(str);
+		return reverse.equalsIgnoreCase(cleanString);
 	}
 }
