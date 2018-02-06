@@ -9,6 +9,7 @@ public class ListToString {
 		List<String> list = new ArrayList<String>();
 		list.add("Hi");
 		list.add("A,l,l");
+
 		list.add("This is fun");
 		System.out.println("Final Comma sep Str: "+listToStr.getCommaSepStrFromList(list));
 		System.out.println("Final Str: "+listToStr.getStrFromList(list));
@@ -20,6 +21,7 @@ public class ListToString {
 		for(int i = 0 ; i < list.size(); i++){	
 			finalStr += list.get(i) + ",";
 		}
+
 		finalStr = finalStr.substring(0, finalStr.lastIndexOf(","));
 		return finalStr;
 	}

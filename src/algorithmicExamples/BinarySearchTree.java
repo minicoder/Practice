@@ -30,6 +30,7 @@ public class BinarySearchTree {
 	 */
 	public static int diameter(TreeNode root) {
 		if(root != null) {
+
 			System.out.println("Root: "+root.val);
 			int leftH = getHeight(root.left);
 			System.out.println("Left Height: "+leftH);

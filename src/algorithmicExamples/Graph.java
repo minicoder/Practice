@@ -1,10 +1,12 @@
 package algorithmicExamples;
 
-import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Stack;
+import java.util.Vector;
 
 /**
  * Created by swetha on 4/25/17.
+ *
  */
 public class Graph {
     private int numOfVertices;
@@ -57,6 +59,28 @@ public class Graph {
         }
     }
 
+    void DFSIter(int s) {
+        Vector<Boolean> visited = new Vector<>();
+        for(int i = 0;i<numOfVertices;i++) {
+            visited.add(false);
+        }
+
+        Stack<Integer> stack = new Stack<>();
+        stack.push(s);
+
+        while(!stack.isEmpty()) {
+            s = stack.pop();
+            if(!visited.isEmpty()&&!visited.get(s)) {
+                System.out.println(""+s);
+                visited.set(s, true);
+            }
+            for (Integer v : adjacentList[s]) {
+                if (!visited.isEmpty() && !visited.get(v))
+                    stack.push(v);
+            }
+        }
+    }
+
     //DFS Use stack..to backtrack
     void DFSUtil(int s, boolean visited[]) {
         visited[s] = true;
@@ -74,6 +98,7 @@ public class Graph {
     //4.Once we hit no where to go, pop 1st elem from stack and backtrack
     // Find adj unvisited nodes..
     void DFS(int s) {
+        //s is start of vertex
         boolean visited[] = new boolean[numOfVertices];
         DFSUtil(s, visited);
     }
@@ -94,7 +119,7 @@ public class Graph {
         g.BFS(2);
         System.out.print("\n");
         System.out.println("DFS...");
-        g.DFS(2);
+        g.DFSIter(2);
 
     }
 

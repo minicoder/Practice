@@ -1,5 +1,8 @@
 package algorithmicExamples;
 
+import sun.text.normalizer.IntTrie;
+import sun.text.normalizer.Trie;
+
 import static algorithmicExamples.Alphabet.LOWERCASE;
 
 import java.util.Collection;
@@ -11,7 +14,7 @@ public class TrieExample implements Vocabulary {
 	private TrieExample[] children = new TrieExample[LOWERCASE.size()];
 	// This is the number of actual children
 	private int numChildren = 0;
-	
+
 	public TrieExample() {
 	}
 	

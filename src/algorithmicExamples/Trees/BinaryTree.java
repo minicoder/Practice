@@ -141,6 +141,29 @@ public class BinaryTree {
         return false;
     }
 
+    public int maxPathSum(TreeNode A) {
+        Res res = new Res();
+        return maxPathUtil(A, res);
+
+    }
+
+    public int maxPathUtil(TreeNode A, Res res) {
+        if(A == null) return 0;
+        if(A.val == -1) return 0;
+
+        int l = maxPathUtil(A.left, res);
+        int r = maxPathUtil(A.right, res);
+
+        int max_single = Math.max(Math.max(l,r) + A.val, A.val);
+
+        int max_top = Math.max(max_single, l+r+A.val);
+
+        res.val = Math.max(res.val, max_top);
+
+        return res.val;
+
+    }
+
     /*
     Given a binary tree, find its maximum depth.
     The maximum depth of a binary tree is the number of nodes
@@ -216,6 +239,27 @@ public class BinaryTree {
         return node;
     }
 
+    public TreeNode invertTree(TreeNode root) {
+        if(root != null) {
+            invertUtil(root);
+        }
+        return root;
+    }
+
+    public void invertUtil(TreeNode root) {
+        TreeNode temp = root.left;
+        root.left = root.right;
+        root.right = temp;
+
+        if(root.left != null) {
+            invertUtil(root.left);
+        }
+
+        if(root.right!= null){
+            invertUtil(root.right);
+        }
+    }
+
     public static void main(String[] args) {
         BinaryTree binaryTree = new BinaryTree();
 //		TreeNode root = new TreeNode(5);
@@ -241,6 +285,9 @@ public class BinaryTree {
     }
 }
 
+class Res {
+    int val;
+}
 class TreeNode {
          int val;
          TreeNode left;
