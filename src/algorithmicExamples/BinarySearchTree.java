@@ -1,7 +1,6 @@
 package algorithmicExamples;
 
-import java.util.ArrayList;
-import java.util.Stack;
+import java.util.*;
 
 public class BinarySearchTree {
 	// Root of BST
@@ -170,6 +169,21 @@ public class BinarySearchTree {
 		return result;
 	}
 
+	public void levelOrderTraversal(TreeNode root) {
+		if(root == null) return;
+
+		Queue<TreeNode> queue = new LinkedList<>();
+		queue.add(root);
+		while(!queue.isEmpty()) {
+			TreeNode current = queue.poll();
+			System.out.println("Value: "+current.val);
+			if(current.left != null)
+				queue.add(current.left);
+			if(current.right != null)
+				queue.add(current.right);
+		}
+	}
+
 	/* A recursive function to insert a new key in BST */
 	TreeNode insertRec(TreeNode root, int key) {
 
@@ -244,16 +258,25 @@ public class BinarySearchTree {
 //		tree.insert(60);
 //		tree.insert(80);
 
-		tree.insert(15);
-		tree.insert(10);
-		tree.insert(20);
-		tree.insert(25);
+//		tree.insert(15);
+//		tree.insert(10);
+//		tree.insert(20);
+//		tree.insert(25);
+
+
+		tree.insert(0);
+		tree.insert(1);
+		tree.insert(2);
+		tree.insert(3);
+		tree.insert(4);
+
 
 		// print inorder traversal of the BST
 		//tree.inorder();
-		System.out.println("Inorder traversal iterative: "+tree.inorderIterative(tree.root));
-		System.out.println("Preorder traversal iterative: "+tree.preorderIterative(tree.root));
-		System.out.println("Postorder traversal iterative: "+tree.postorderIterative(tree.root));
+//		System.out.println("Inorder traversal iterative: "+tree.inorderIterative(tree.root));
+//		System.out.println("Preorder traversal iterative: "+tree.preorderIterative(tree.root));
+//		System.out.println("Postorder traversal iterative: "+tree.postorderIterative(tree.root));
+		tree.levelOrderTraversal(tree.root);
 
 		TreeNode root = new TreeNode(1);
 		root.left = new TreeNode(2);
@@ -265,7 +288,7 @@ public class BinarySearchTree {
 		root.left.right.left.right = new TreeNode(7);
 		root.left.left.left = new TreeNode(8);
 
-		System.out.println("Diameter of Tree: " + diameter(root));
+//		System.out.println("Diameter of Tree: " + diameter(root));
 	}
 
 }

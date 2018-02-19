@@ -154,9 +154,9 @@ public class BinaryTree {
         int l = maxPathUtil(A.left, res);
         int r = maxPathUtil(A.right, res);
 
-        int max_single = Math.max(Math.max(l,r) + A.val, A.val);
+        int max_single = Math.max(Math.max(l, r) + A.val, A.val);
 
-        int max_top = Math.max(max_single, l+r+A.val);
+        int max_top = Math.max(max_single, l + r + A.val);
 
         res.val = Math.max(res.val, max_top);
 
@@ -199,6 +199,22 @@ public class BinaryTree {
         return Math.min(minDepth(A.left), minDepth(A.right)) +1;
     }
 
+    public int size(TreeNode root) {
+        int size = 0;
+        if(root == null) return 0;
+        return size(root.left) + 1 + size(root.right);
+    }
+
+    public int numberOfLeaves(TreeNode root) {
+        if(root == null) return 0;
+        int num = 0;
+        if(root.left == null && root.right == null) {
+            return num + 1;
+        } else {
+            return numberOfLeaves(root.left) + numberOfLeaves(root.right);
+        }
+    }
+
     /*
     Given preorder and inorder traversal of a tree, construct the binary tree.
     Input :
@@ -235,7 +251,6 @@ public class BinaryTree {
             node.right = buildTree(rightPreorder, rightInorder);
 
         }
-        System.out.println("Node:"+node);
         return node;
     }
 
@@ -264,13 +279,22 @@ public class BinaryTree {
         BinaryTree binaryTree = new BinaryTree();
 //		TreeNode root = new TreeNode(5);
 //		root.right = new TreeNode(8);
+//        root.left = new TreeNode(3);
 //		root.left.left = new TreeNode(11);
 //        root.left.left.left = new TreeNode(7);
 //        root.left.left.right = new TreeNode(2);
-//
 //		root.right.left = new TreeNode(13);
 //		root.right.right = new TreeNode(4);
 //        root.right.right.right = new TreeNode((1));
+        TreeNode root = new TreeNode(1);
+        root.right = new TreeNode(3);
+        root.left = new TreeNode(2);
+        root.left.left = new TreeNode(4);
+        root.left.right = new TreeNode(5);
+        root.left.left.left = new TreeNode(8);
+        root.left.left.right = new TreeNode(9);
+        root.right.left = new TreeNode(6);
+        root.right.right = new TreeNode(7);
 //        System.out.println("isBalanced: "+binaryTree.isBalanced(root));
 //        System.out.println("hasPathSum: "+binaryTree.hasPathSum(root, 22));
 //        System.out.println("Max Depth: "+binaryTree.maxDepth(root));
@@ -280,8 +304,10 @@ public class BinaryTree {
 //        ArrayList<Integer> preOrderList = new ArrayList<Integer>(Arrays.asList(preOrderArr));
 //        System.out.println("Constructed Binary Tree: "+binaryTree.buildTree(new ArrayList<Integer>(Arrays.asList(1,2,4,8,9,10,11,5,3,6,7)),
 //                new ArrayList<Integer>(Arrays.asList(8,4,10, 9,11,2,5,1,6,3,7))));
-        System.out.println("Constructed Binary Tree: "+binaryTree.buildTree(new ArrayList<Integer>(Arrays.asList(1,2,3)),
-                new ArrayList<Integer>(Arrays.asList(2,1,3))));
+        System.out.println(binaryTree.size(root));
+        System.out.println(binaryTree.numberOfLeaves(root));
+//        System.out.println("Constructed Binary Tree: "+binaryTree.buildTree(new ArrayList<Integer>(Arrays.asList(1,2,3)),
+//                new ArrayList<Integer>(Arrays.asList(2,1,3))));
     }
 }
 
