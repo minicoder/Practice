@@ -215,6 +215,26 @@ public class BinaryTree {
         }
     }
 
+    /**
+     *
+     * Given a binary tree, write a method to find and return the sum of all the elements using recursion. For an empty tree the sum is 0.
+     Example:
+     1
+     / \
+     2   3
+     / \ / \
+     4  5 6  7
+     /
+     8
+     ==> sum of all nodes = 36
+     (1+2+3+4+5+6+7+8)
+     */
+    public int sum(TreeNode root) {
+        if(root == null) return 0;
+
+        int val = root.val;
+        return sum(root.left) + sum(root.right) + val;
+    }
     /*
     Given preorder and inorder traversal of a tree, construct the binary tree.
     Input :
@@ -292,7 +312,7 @@ public class BinaryTree {
         root.left.left = new TreeNode(4);
         root.left.right = new TreeNode(5);
         root.left.left.left = new TreeNode(8);
-        root.left.left.right = new TreeNode(9);
+//        root.left.left.right = new TreeNode(9);
         root.right.left = new TreeNode(6);
         root.right.right = new TreeNode(7);
 //        System.out.println("isBalanced: "+binaryTree.isBalanced(root));
@@ -306,6 +326,7 @@ public class BinaryTree {
 //                new ArrayList<Integer>(Arrays.asList(8,4,10, 9,11,2,5,1,6,3,7))));
         System.out.println(binaryTree.size(root));
         System.out.println(binaryTree.numberOfLeaves(root));
+        System.out.println(binaryTree.sum(root));
 //        System.out.println("Constructed Binary Tree: "+binaryTree.buildTree(new ArrayList<Integer>(Arrays.asList(1,2,3)),
 //                new ArrayList<Integer>(Arrays.asList(2,1,3))));
     }
