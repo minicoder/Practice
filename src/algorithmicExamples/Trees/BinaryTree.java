@@ -49,6 +49,8 @@ public class BinaryTree {
     }
 
     /*
+    Time: O(n)
+    Space: O(n)
     Two binary trees are considered equal if they are structurally identical and the nodes have the same value.
     Return 0 / 1 ( 0 for false, 1 for true ) for this problem
     Example :
@@ -95,6 +97,26 @@ public class BinaryTree {
         }
 
         return 1;
+    }
+
+    /**
+     * Recursive
+     * Space: O(logN)
+     * Time: O(n)
+     *
+     */
+    public boolean isIdentical(TreeNode root1, TreeNode root2) {
+        //if both or one of the tree is empty
+        if(root1 == null && root2 == null)
+            return true;
+        if(root1 == null || root2 == null)
+            return false;
+        //both are not empty
+        return (
+                root1.val == root2.val &&
+                        isIdentical(root1.left, root2.left) &&
+                        isIdentical(root1.right, root2.right)
+        );
     }
 
     /*
@@ -199,12 +221,44 @@ public class BinaryTree {
         return Math.min(minDepth(A.left), minDepth(A.right)) +1;
     }
 
+    /**
+     * Write a non-recursive method minTreeDepth that takes in the root node of a Binary Tree
+     * and returns the minimum depth of the tree.
+     * The minimum depth is defined as the least number of node traversals needed to reach a
+     * leaf from the root node. Your method should run in linear O(n) time and use at max O(n) space.
+     * @param root
+     * @return
+     */
+    public int minDepthIter(TreeNode root) {
+        if(root == null) return 0;
+        int depth = 1;
+        Queue<TreeNode> currLevel = new LinkedList<>();
+        Queue<TreeNode> nextLevel = new LinkedList<>();
+        currLevel.add(root);
+        while(!currLevel.isEmpty()) {
+            TreeNode t = currLevel.poll();
+            if(t.left == null && t.right == null) return depth;
+            else {
+                if(t.left != null) nextLevel.add(t.left);
+                if(t.right != null) nextLevel.add(t.right);
+                if(currLevel.isEmpty()) {
+                    depth++;
+                    currLevel = nextLevel;
+                    nextLevel = new LinkedList<>();
+                }
+            }
+        }
+        return depth;
+    }
+
     public int size(TreeNode root) {
         int size = 0;
         if(root == null) return 0;
         return size(root.left) + 1 + size(root.right);
     }
 
+    //Time: O(n)
+    //Space: O(log n)
     public int numberOfLeaves(TreeNode root) {
         if(root == null) return 0;
         int num = 0;
@@ -235,6 +289,71 @@ public class BinaryTree {
         int val = root.val;
         return sum(root.left) + sum(root.right) + val;
     }
+
+    /**
+     *Sum Iterative
+     * Time : O(n)
+     * Space : O(n)
+     */
+    public int sumItr(TreeNode root) {
+        if(root == null) return 0;
+
+        int sum = 0;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        TreeNode curr;
+        while (!queue.isEmpty()) {
+             curr = queue.poll();
+            sum +=curr.val;
+
+            if(curr.left != null) {
+                queue.add(curr.left);
+            }
+            if(curr.right != null) {
+                queue.add(curr.right);
+            }
+        }
+        return sum;
+    }
+    //Iterative
+    public TreeNode findNode(TreeNode root, int val) {
+        if(root == null) return null;
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+
+        while (!stack.isEmpty()) {
+            TreeNode n = stack.pop();
+            if(n.val == val) return n;
+
+            if(n.right != null)
+                stack.push(n.right);
+            if(n.left != null)
+                stack.push(n.left);
+        }
+        return root;
+    }
+
+    /**
+     * Write a function to iteratively determine the total number of "full nodes" in a binary tree. A full node contains left and right child nodes. If there are no full nodes, return 0.
+     Example:
+            1
+           / \
+          2   3
+         / \ / \
+        4  5 6  7
+       / \
+      8   9
+
+     Full nodes count ==> 4
+     Space: O(n)
+     */
+    public int numberOfFullNodes(TreeNode root) {
+        if(root == null) return 0;
+        if(root.left != null && root.right != null)
+            return numberOfFullNodes(root.left) + numberOfFullNodes(root.right) + 1;
+        return 0;
+    }
+
     /*
     Given preorder and inorder traversal of a tree, construct the binary tree.
     Input :
@@ -274,6 +393,7 @@ public class BinaryTree {
         return node;
     }
 
+    // Time : O(n), Space : O(log n)
     public TreeNode invertTree(TreeNode root) {
         if(root != null) {
             invertUtil(root);
@@ -315,6 +435,7 @@ public class BinaryTree {
 //        root.left.left.right = new TreeNode(9);
         root.right.left = new TreeNode(6);
         root.right.right = new TreeNode(7);
+        System.out.println("Number of full nodes: "+binaryTree.numberOfFullNodes(root));
 //        System.out.println("isBalanced: "+binaryTree.isBalanced(root));
 //        System.out.println("hasPathSum: "+binaryTree.hasPathSum(root, 22));
 //        System.out.println("Max Depth: "+binaryTree.maxDepth(root));
@@ -324,9 +445,10 @@ public class BinaryTree {
 //        ArrayList<Integer> preOrderList = new ArrayList<Integer>(Arrays.asList(preOrderArr));
 //        System.out.println("Constructed Binary Tree: "+binaryTree.buildTree(new ArrayList<Integer>(Arrays.asList(1,2,4,8,9,10,11,5,3,6,7)),
 //                new ArrayList<Integer>(Arrays.asList(8,4,10, 9,11,2,5,1,6,3,7))));
-        System.out.println(binaryTree.size(root));
-        System.out.println(binaryTree.numberOfLeaves(root));
-        System.out.println(binaryTree.sum(root));
+        System.out.println("Size: "+binaryTree.size(root));
+        System.out.println("Number of leaves: "+binaryTree.numberOfLeaves(root));
+        System.out.println("Sum: "+binaryTree.sum(root));
+        System.out.println("Iter Sum: "+binaryTree.sumItr(root));
 //        System.out.println("Constructed Binary Tree: "+binaryTree.buildTree(new ArrayList<Integer>(Arrays.asList(1,2,3)),
 //                new ArrayList<Integer>(Arrays.asList(2,1,3))));
     }

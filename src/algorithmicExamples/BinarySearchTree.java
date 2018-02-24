@@ -68,7 +68,7 @@ public class BinarySearchTree {
 	public void preOrderRec(TreeNode root) {
 		if(root !=  null) {
 			//Visit the node-Printing the node data
-			System.out.printf("%d ",root.val);
+			System.out.printf("%d ", root.val);
 			preOrderRec(root.left);
 			preOrderRec(root.right);
 		}
@@ -118,28 +118,25 @@ public class BinarySearchTree {
 	}
 
 	//Left, Node, Right
-	public ArrayList<Integer> inorderIterative(TreeNode A) {
+	//Time: O(n), Space: O(log n)
+	//Stack: LIFO
+	public ArrayList<Integer> inorderIterative(TreeNode root) {
 		ArrayList<Integer> result = new ArrayList<>();
-		if(A == null) return new ArrayList<>();
-		TreeNode p = A;
+		if(root == null) return new ArrayList<>();
 
 		Stack<TreeNode> stack = new Stack<>();
 
-		while(!stack.empty() || p != null) {
-			// if it is not null, push to stack
-			//and go down the tree to left
-			if(p != null) {
-				stack.push(p);
-				p = p.left;
-			} else {
-				// if no left child
-				// pop stack, process the node
-				// then let p point to the right
-				TreeNode n = stack.pop();
-				result.add(n.val);
-				p = n.right;
+		while(true) {
+			while(root != null) {
+				stack.push(root);//Add root
+				root = root.left; //Add left nodes
 			}
+			if(stack.empty()) break;
+			root = stack.pop(); //pop back left and root.
+			result.add(root.val);
+			root = root.right;//add all right nodes
 		}
+
 		return result;
 	}
 
@@ -176,7 +173,7 @@ public class BinarySearchTree {
 		queue.add(root);
 		while(!queue.isEmpty()) {
 			TreeNode current = queue.poll();
-			System.out.println("Value: "+current.val);
+			System.out.println("Value: " + current.val);
 			if(current.left != null)
 				queue.add(current.left);
 			if(current.right != null)
@@ -184,7 +181,29 @@ public class BinarySearchTree {
 		}
 	}
 
+	/**
+	 * Space : O(n)
+	 * Time : O(n)
+	 */
+	public ArrayList<Integer> levelorder(TreeNode root) {
+		ArrayList<Integer> result = new ArrayList<>();
+		if(root == null) return result;
+
+		Queue<TreeNode> queue = new LinkedList<>();
+		queue.add(root);
+		while(!queue.isEmpty()) {
+			TreeNode curr = queue.poll();
+			result.add(curr.val);
+			if(curr.left != null)
+				queue.add(curr.left);
+			if(curr.right != null)
+				queue.add(curr.right);
+		}
+		return result;
+	}
+
 	/* A recursive function to insert a new key in BST */
+	//Space: O(log n), Time: O(log n)
 	TreeNode insertRec(TreeNode root, int key) {
 
         /* If the tree is empty, return a new node */
@@ -240,6 +259,206 @@ public class BinarySearchTree {
 		return validate(root.left, min, root.val) && validate(root.right, root.val, max);
 	}
 
+	public static boolean validateBSTItrEfficient(TreeNode root) {
+
+		class TreeBoundaryNode{
+			TreeNode treeNode;
+			int leftBoundary;
+			int rightBoundary;
+			TreeBoundaryNode(TreeNode treeNode, int leftBoundary, int rightBoundary) {
+				this.treeNode = treeNode;
+				this.leftBoundary = leftBoundary;
+				this.rightBoundary = rightBoundary;
+			}
+		}
+
+		if(root == null || (root.left == null && root.right == null)) return true;
+
+		Queue<TreeBoundaryNode> q = new LinkedList<>();
+		q.add(new TreeBoundaryNode(root, Integer.MIN_VALUE, Integer.MAX_VALUE));
+		while(!q.isEmpty()){
+			TreeBoundaryNode tbNode = q.poll();
+			TreeNode t = tbNode.treeNode;
+			if((t.val <= tbNode.leftBoundary) || (t.val >= tbNode.rightBoundary)) return false;
+			if(t.left != null){
+				q.add(new TreeBoundaryNode(t.left, tbNode.leftBoundary, t.val));
+			}
+			if(t.right != null){
+				q.add(new TreeBoundaryNode(t.right, t.val, tbNode.rightBoundary));
+			}
+		}
+
+		return true;
+	}
+
+	//Space: O(n), Time: O(n)
+	public static boolean validateBSTItr(TreeNode root) {
+		if(root == null) return true;
+		Queue<TreeNode> leftSubTreeQueue = new LinkedList<>();
+		Queue<TreeNode> rightSubTreeQueue = new LinkedList<>();
+		Queue<TreeNode> leftQueue = new LinkedList<>();
+		Queue<TreeNode> rightQueue = new LinkedList<>();
+		if(root.left != null)
+			leftSubTreeQueue.add(root.left);
+
+		if(root.right != null)
+			rightSubTreeQueue.add(root.right);
+
+		while(!leftSubTreeQueue.isEmpty()) {
+			TreeNode current = leftSubTreeQueue.poll();
+			if(current.val > root.val) return false;
+			if(current.left != null)
+				leftQueue.add(current.left);
+			while(!leftQueue.isEmpty()) {
+				TreeNode subLeftChild = leftQueue.poll();
+				if(subLeftChild.val > current.val || subLeftChild.val > root.val) return false;
+				if(subLeftChild.left != null)
+					leftQueue.add(subLeftChild.left);
+			}
+
+			if(current.right != null)
+				rightQueue.add(current.right);
+			while(!rightQueue.isEmpty()) {
+				TreeNode subRightChild = rightQueue.poll();
+				if(subRightChild.val <= current.val || subRightChild.val > root.val) return false;
+				if(subRightChild.right != null)
+					rightQueue.add(subRightChild.right);
+			}
+
+		}
+
+		leftQueue = new LinkedList<>(); rightQueue = new LinkedList<>();
+
+		while(!rightSubTreeQueue.isEmpty()) {
+			TreeNode current = rightSubTreeQueue.poll();
+			if(current.val < root.val) return false;
+			if(current.left != null)
+				leftQueue.add(current.left);
+			while(!leftQueue.isEmpty()) {
+				TreeNode subLeftChild = leftQueue.poll();
+				if(subLeftChild.val > current.val || subLeftChild.val > root.val) return false;
+				if(subLeftChild.left != null)
+					leftQueue.add(subLeftChild.left);
+			}
+
+			if(current.right != null)
+				rightQueue.add(current.right);
+			while(!rightQueue.isEmpty()) {
+				TreeNode subRightChild = rightQueue.poll();
+				if(subRightChild.val <= current.val || subRightChild.val > root.val) return false;
+				if(subRightChild.right != null)
+					leftQueue.add(subRightChild.right);
+			}
+
+		}
+		return true;
+	}
+
+	//Space: O(log n) Time: O(log n)
+	public TreeNode findMax(TreeNode root) {
+		if(root == null) return null;
+		if(root.right == null) return root;
+		return findMax(root.right);
+	}
+
+	public TreeNode findMin(TreeNode root) {
+		if(root == null) return null;
+		if(root.left == null) return root;
+		return findMin(root.left);
+	}
+
+	/**
+	 * Given a
+	 binary search tree
+	 and an integer k, implement a method to find and return the kth smallest node.
+	 Example:
+	  4
+	 / \
+	 2  8
+	 /  \
+	 5  10
+
+	 K = 2, Output = 4
+
+	 Time: O(n)
+	 Space : O(logn)
+	 */
+	public TreeNode findKthSmallest(TreeNode root, int k) {
+		if(root == null) return null;
+
+		int lSize = 0;
+		if(root.left != null)
+			lSize = findSize(root.left);
+
+		if(lSize+1 == k) return root;
+		else if(k <= lSize)
+			return findKthSmallest(root.left, k);
+
+		return findKthSmallest(root.right, k - lSize - 1);
+	}
+
+	/**
+	 * Given a
+	 Binary Search Tree
+	 and an integer k, implement a method to find and return its kth largest node
+
+	 Example:
+
+	 		 4
+	 		/ \
+	       2   8
+	 		  / \
+	 		 5  10
+
+	 K = 2, Output = 8
+
+	 In the above scenario, if k = 1, then the output is 10 i.e. k = 1, represents the largest element of the tree, k = 2, represents the second largest element and so on.
+	 Time: O(n)
+	 Space: O(log n)
+	 */
+	public TreeNode findKthLargest(TreeNode root, int k) {
+		if(root == null) return null;
+
+		int rSize = 0;
+		if(root.right != null)
+			rSize = findSize(root.right);
+
+		if(rSize+1 == k) return root;
+		else if(k <= rSize)
+			return findKthLargest(root.right, k);
+
+		return findKthLargest(root.left, k - rSize - 1);
+	}
+
+	//Time: O(n), Space: O(log n)
+	public int findSize(TreeNode root) {
+		if(root == null) return 0;
+		return findSize(root.left) + 1 + findSize(root.right);
+	}
+
+	//Use Inorder to print in ascending order
+	public void printRange(TreeNode root, int a, int b) {
+		ArrayList<Integer> rangeList = new ArrayList<>();
+
+		Stack<TreeNode> stack = new Stack<>();
+		TreeNode current = root;
+		while(true) {
+			while(current != null) {
+				if (current.val >= a && current.val <= b) {
+					stack.push(current);
+					current = current.left;
+				} else break;
+			}
+			if(stack.isEmpty()) break;
+			current = stack.pop();
+			rangeList.add(current.val);
+			current = current.right;
+		}
+
+		rangeList.forEach(i -> System.out.print(i+" "));
+
+	}
+
 	// Driver Program to test above functions
 	public static void main(String[] args) {
 		BinarySearchTree tree = new BinarySearchTree();
@@ -264,11 +483,12 @@ public class BinarySearchTree {
 //		tree.insert(25);
 
 
-		tree.insert(0);
-		tree.insert(1);
-		tree.insert(2);
 		tree.insert(3);
 		tree.insert(4);
+		tree.insert(5);
+		tree.insert(7);
+		tree.insert(8);
+		tree.insert(10);
 
 
 		// print inorder traversal of the BST
@@ -276,7 +496,8 @@ public class BinarySearchTree {
 //		System.out.println("Inorder traversal iterative: "+tree.inorderIterative(tree.root));
 //		System.out.println("Preorder traversal iterative: "+tree.preorderIterative(tree.root));
 //		System.out.println("Postorder traversal iterative: "+tree.postorderIterative(tree.root));
-		tree.levelOrderTraversal(tree.root);
+//		tree.levelOrderTraversal(tree.root);
+//		tree.levelorder(tree.root);
 
 		TreeNode root = new TreeNode(1);
 		root.left = new TreeNode(2);
@@ -287,6 +508,20 @@ public class BinarySearchTree {
 		root.left.right.left = new TreeNode(6);
 		root.left.right.left.right = new TreeNode(7);
 		root.left.left.left = new TreeNode(8);
+		root.left.left.left.left = new TreeNode();
+
+		TreeNode root2 = new TreeNode(20);
+		root2.left = new TreeNode(30);
+		root2.left.left = new TreeNode(14);
+		root2.left.right = new TreeNode(18);
+		root2.right = new TreeNode(15);
+		System.out.println("Validate: "+validateBSTItr(root2));
+
+		tree.printRange(tree.root, 3 , 10);
+//		TreeNode smallestNode = tree.findKthSmallest(root, 2);
+//		TreeNode largestNode = tree.findKthLargest(root, 2);
+//		System.out.println("Kth Smallest node: "+smallestNode.val);
+//		System.out.println("Kth Largest node: "+largestNode.val);
 
 //		System.out.println("Diameter of Tree: " + diameter(root));
 	}
@@ -297,9 +532,13 @@ class TreeNode {
 	int val;
 	TreeNode left;
 	TreeNode right;
- 
+
 	public TreeNode(int x) {
 		val = x;
+		left = right = null;
+	}
+
+	public TreeNode() {
 		left = right = null;
 	}
 }
