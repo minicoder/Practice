@@ -354,6 +354,102 @@ public class BinaryTree {
         return 0;
     }
 
+    public int numberOfHalfNodes(TreeNode root) {
+        if(root == null) return 0;
+        int count = 0;
+        if(root.left != null && root.right != null) {
+            count = numberOfHalfNodes(root.left) + numberOfHalfNodes(root.right);
+        }
+        if(root.left != null && root.right == null)
+            count = numberOfHalfNodes(root.left) + 1;
+        else if(root.left == null && root.right != null) {
+            count = numberOfHalfNodes(root.right) + 1;
+        }
+        return count;
+    }
+
+    //Space : O(n)
+    public int numberOfHalfNodesIter(TreeNode root) {
+        if(root == null) return 0;
+        Queue<TreeNode> q = new LinkedList<>();
+        q.add(root);
+        int count = 0;
+        TreeNode current = null;
+        while(!q.isEmpty()) {
+            current = q.poll();
+            if(current.left == null && current.right != null ||
+                    current.left != null && current.right == null) {
+                count++;
+            }
+            if(current.left != null) q.add(current.left);
+            if(current.right != null) q.add(current.right);
+        }
+        return count;
+    }
+
+    //XOR
+    public int numberOfHalfNodesXOR(TreeNode root) {
+        if(root == null)return 0;
+        int count = 0;
+        if(root.left == null ^ root.right == null) {
+            count++;
+        }
+        return numberOfHalfNodesXOR(root.left) + numberOfHalfNodesXOR(root.right) + count;
+    }
+
+    /**
+     * Given a binary tree, write a method to find and return its deepest node.
+     * Return null for an empty tree.
+     Example:
+                1
+               / \
+              2   3     ==> deepest = 9
+             / \ / \
+            4  5 6  7
+           / \
+          8   9
+
+     Time: O(n), Space: O(n)
+     */
+    public TreeNode findDeepest(TreeNode root) {
+        if(root == null) return null;
+        List<TreeNode> list = new ArrayList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while(!queue.isEmpty()) {
+            TreeNode curr = queue.poll();
+            list.add(curr);
+            if(curr.left != null)
+                queue.add(curr.left);
+            if(curr.right != null)
+                queue.add(curr.right);
+        }
+
+        return list.get(list.size()-1);
+    }
+
+    public String serializeTree(TreeNode root){
+        if(root == null) return null;
+        StringBuilder sb = new StringBuilder();
+        serialize(root, sb);
+        if(sb.length() > 0) sb.deleteCharAt(0);
+        return sb.toString();
+    }
+
+    public StringBuilder serialize(TreeNode root, StringBuilder stringBuilder) {
+        if(root == null) stringBuilder.append(", null");
+        else {
+            stringBuilder.append(", ").append(root.val);
+            serialize(root.left, stringBuilder);
+            serialize(root.right, stringBuilder);
+        }
+        return stringBuilder;
+    }
+
+//    public TreeNode restoreTree(String str){
+//
+//    }
+
     /*
     Given preorder and inorder traversal of a tree, construct the binary tree.
     Input :
@@ -415,6 +511,22 @@ public class BinaryTree {
         }
     }
 
+    //Time: O(n), Space: O(n)
+    public int findMaxItr(TreeNode root) {
+        int max = Integer.MIN_VALUE;
+        if(root == null) return max;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while(!queue.isEmpty()) {
+            TreeNode curr = queue.poll();
+            if(curr.val > max) max = curr.val;
+            if(curr.left != null) queue.add(curr.left);
+            if(curr.right != null) queue.add(curr.right);
+        }
+
+        return max;
+    }
+
     public static void main(String[] args) {
         BinaryTree binaryTree = new BinaryTree();
 //		TreeNode root = new TreeNode(5);
@@ -430,12 +542,18 @@ public class BinaryTree {
         root.right = new TreeNode(3);
         root.left = new TreeNode(2);
         root.left.left = new TreeNode(4);
-        root.left.right = new TreeNode(5);
-        root.left.left.left = new TreeNode(8);
-//        root.left.left.right = new TreeNode(9);
-        root.right.left = new TreeNode(6);
-        root.right.right = new TreeNode(7);
+//        root.left.right = new TreeNode(5);
+//        root.left.left.left = new TreeNode(8);
+        root.left.left.right = new TreeNode(9);
+//        root.right.left = new TreeNode(6);
+//        root.right.right = new TreeNode(7);
         System.out.println("Number of full nodes: "+binaryTree.numberOfFullNodes(root));
+        System.out.println("deepest node: "+binaryTree.findDeepest(root).val);
+        System.out.println("Serialize: "+binaryTree.serializeTree(root));
+        System.out.println("Number of Half Nodes: "+ binaryTree.numberOfHalfNodes(root));
+        System.out.println("Number of Half Nodes Iter: "+ binaryTree.numberOfHalfNodesIter(root));
+        System.out.println("Number of Half Nodes XOR: "+ binaryTree.numberOfHalfNodesXOR(root));
+        System.out.println("Find Max: "+binaryTree.findMaxItr(root));
 //        System.out.println("isBalanced: "+binaryTree.isBalanced(root));
 //        System.out.println("hasPathSum: "+binaryTree.hasPathSum(root, 22));
 //        System.out.println("Max Depth: "+binaryTree.maxDepth(root));

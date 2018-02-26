@@ -437,7 +437,7 @@ public class BinarySearchTree {
 	}
 
 	//Use Inorder to print in ascending order
-	public void printRange(TreeNode root, int a, int b) {
+	public void printRangeIter(TreeNode root, int a, int b) {
 		ArrayList<Integer> rangeList = new ArrayList<>();
 
 		Stack<TreeNode> stack = new Stack<>();
@@ -456,7 +456,22 @@ public class BinarySearchTree {
 		}
 
 		rangeList.forEach(i -> System.out.print(i+" "));
+	}
 
+	//Space: O(1), Time: O(n)
+	private ArrayList<Integer> rangeList = new ArrayList<>();
+	public void printRange(TreeNode root, int a, int b) {
+		if(root == null) return;
+
+		if(root.val >= a){
+			printRange(root.left, a, b);
+		}
+		if(a <= root.val && root.val <= b)
+			rangeList.add(root.val);
+
+		if(root.val <= b) {
+			printRange(root.right, a, b);
+		}
 	}
 
 	// Driver Program to test above functions
