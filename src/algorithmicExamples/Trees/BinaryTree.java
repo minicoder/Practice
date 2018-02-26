@@ -163,27 +163,41 @@ public class BinaryTree {
         return false;
     }
 
-    public int maxPathSum(TreeNode A) {
-        Res res = new Res();
-        return maxPathUtil(A, res);
+    /**
+     * Given a binary tree consisting of nodes with positive integer values, write a method -
+     * maxSumPath that returns the maximum sum of data values obtained by traversing nodes along a path between any 2 nodes of the tree.
+     * The path must originate and terminate at 2 different nodes of the tree, and the maximum sum is obtained by
+     * summing all the data values of the nodes traversed along this path.
 
+     Example:
+
+                     1
+                    / \
+                   2   3     => 18
+                  / \ / \
+                 4  5 6  7
+
+     Path: 5 -> 2 -> 1 -> 3 -> 7
+     Max Sum = 5+2+1+3+7 = 18
+
+
+     */
+    public static int maxSumPath(TreeNode root) {
+        int[] maxRecursiveHolder = new int[1];
+        maxSumPathMain(root, maxRecursiveHolder);
+        return maxRecursiveHolder[0];
     }
 
-    public int maxPathUtil(TreeNode A, Res res) {
-        if(A == null) return 0;
-        if(A.val == -1) return 0;
+    private static int maxSumPathMain(TreeNode root, int[] maxRecursiveHolder) {
+        if(root == null) return 0;
+        int leftSum = maxSumPathMain(root.left, maxRecursiveHolder);
+        int rightSum = maxSumPathMain(root.right, maxRecursiveHolder);
 
-        int l = maxPathUtil(A.left, res);
-        int r = maxPathUtil(A.right, res);
+        //Get max path sum upto this node, incl this node's value
+        int nodeSumVal = Math.max(root.val + leftSum, root.val + rightSum);
+        maxRecursiveHolder[0] = Math.max(maxRecursiveHolder[0], leftSum + root.val + rightSum);
 
-        int max_single = Math.max(Math.max(l, r) + A.val, A.val);
-
-        int max_top = Math.max(max_single, l + r + A.val);
-
-        res.val = Math.max(res.val, max_top);
-
-        return res.val;
-
+        return nodeSumVal;
     }
 
     /*
@@ -425,30 +439,40 @@ public class BinaryTree {
                 queue.add(curr.right);
         }
 
-        return list.get(list.size()-1);
+        return list.get(list.size() - 1);
     }
 
     public String serializeTree(TreeNode root){
-        if(root == null) return null;
         StringBuilder sb = new StringBuilder();
-        serialize(root, sb);
+        serializeTreeHelper(root, sb);
         if(sb.length() > 0) sb.deleteCharAt(0);
         return sb.toString();
     }
 
-    public StringBuilder serialize(TreeNode root, StringBuilder stringBuilder) {
-        if(root == null) stringBuilder.append(", null");
+    private StringBuilder serializeTreeHelper(TreeNode t, StringBuilder sb){
+        if(t == null) sb.append(",null");
         else {
-            stringBuilder.append(", ").append(root.val);
-            serialize(root.left, stringBuilder);
-            serialize(root.right, stringBuilder);
+            sb.append("," + t.val);
+            serializeTreeHelper(t.left, sb);
+            serializeTreeHelper(t.right, sb);
         }
-        return stringBuilder;
+        return sb;
     }
 
-//    public TreeNode restoreTree(String str){
-//
-//    }
+    public TreeNode restoreTree(String str){
+        String[] nodesSplit = str.split(",");
+        LinkedList<String> nodesList = new LinkedList<>(Arrays.asList(nodesSplit));
+        return restoreTreeHelper(nodesList);
+    }
+
+    public TreeNode restoreTreeHelper(LinkedList<String> nodes){
+        String nodeDataStr = nodes.remove();
+        if(nodeDataStr.equals("null")) return null;
+        TreeNode t = new TreeNode(Integer.valueOf(nodeDataStr));
+        t.left = restoreTreeHelper(nodes);
+        t.right = restoreTreeHelper(nodes);
+        return t;
+    }
 
     /*
     Given preorder and inorder traversal of a tree, construct the binary tree.
@@ -527,6 +551,133 @@ public class BinaryTree {
         return max;
     }
 
+    /**
+     * Given a binary tree's root node, an empty ArrayList and an integer nodeData,
+     * write a method that finds a target node - N with data = nodeData and populates the ArrayList with the data of the ancestor nodes of N - added from the bottom - up.
+     Example:
+
+                1
+               / \
+              2   3
+             / \ / \
+            4  5 6  7
+
+     Node: 5 ==> [2, 1]
+     Time: O(n), Space: O(1)
+     */
+
+    public ArrayList<Integer> ancestorsList = new ArrayList<>();
+    public boolean printAncestors(TreeNode root, int nodeData) {
+        if(root == null) return false;
+
+        if(root.val == nodeData) return true;
+
+        if(printAncestors(root.left, nodeData) || printAncestors(root.right, nodeData)) {
+            ancestorsList.add(root.val);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Given a binary tree, write a method to print the tree level by level.
+
+     Example:
+                1
+               / \
+              2   3
+             / \ / \
+            4  5 6  7
+
+     ==>  [1][2, 3][4, 5, 6, 7]
+
+     Time: O(n), Space: O(n)
+     */
+
+    public ArrayList<ArrayList<Integer>> printLevelByLevel(TreeNode root) {
+        if(root == null) return new ArrayList<>();
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+        ArrayList<Integer> innerList = new ArrayList<>();
+        Queue<TreeNode> currentLevelQueue = new LinkedList<>();
+        Queue<TreeNode> nextLevelQueue = new LinkedList<>();
+        currentLevelQueue.add(root);
+        while(!currentLevelQueue.isEmpty()) {
+            TreeNode curr = currentLevelQueue.poll();
+            innerList.add(curr.val);
+
+            if(curr.left != null) {
+                nextLevelQueue.add(curr.left);
+            }
+            if(curr.right != null) {
+                nextLevelQueue.add(curr.right);
+            }
+            if(currentLevelQueue.isEmpty()) {
+                result.add(innerList);
+                innerList = new ArrayList<>();
+                currentLevelQueue.addAll(nextLevelQueue);
+                nextLevelQueue = new LinkedList<>();
+            }
+        }
+
+        return result;
+    }
+
+    public ArrayList<ArrayList<Integer>> printLevelByLevelEff(TreeNode root) {
+        ArrayList<ArrayList<Integer>> solution = new ArrayList<>();
+        if (root == null) {
+            return solution;
+        }
+
+        Queue<TreeNode> q = new LinkedList<>();
+        q.add(root);
+
+        while (!q.isEmpty()) {
+            ArrayList<Integer> level = new ArrayList<>();
+            int size = q.size();
+
+            while (size-- > 0) {
+                root = q.poll();
+                level.add(root.val);
+
+                if (root.left != null) {
+                    q.add(root.left);
+                }
+                if (root.right != null) {
+                    q.add(root.right);
+                }
+            }
+            solution.add(level);
+        }
+        return solution;
+    }
+
+    /**
+     * Given the root of a Binary Tree  and an integer that represents the data value of a TreeNode present in the tree, write a method - pathLengthFromRoot that returns the distance between the root and that node. You can assume that the given key exists in the tree. The distance is defined as the minimum number of nodes that must be traversed to reach the target node.
+
+     Example:
+                 1
+                / \
+               2   3
+                \   \
+                4   5
+
+     pathLengthFromRoot(root,5) => 3
+     pathLengthFromRoot(root,1) => 1
+     pathLengthFromRoot(root,3) => 2
+
+     Space: O(n), Time: O(n)
+     */
+    public int pathLengthFromRoot(TreeNode root, int n1) {
+        if(root == null) return 0;
+
+        int length = 0;
+        if(root.val == n1 || (length = pathLengthFromRoot(root.left, n1)) > 0 ||
+                (length = pathLengthFromRoot(root.right, n1)) > 0) {
+            return length + 1;
+        }
+        return length;
+    }
+
     public static void main(String[] args) {
         BinaryTree binaryTree = new BinaryTree();
 //		TreeNode root = new TreeNode(5);
@@ -542,18 +693,33 @@ public class BinaryTree {
         root.right = new TreeNode(3);
         root.left = new TreeNode(2);
         root.left.left = new TreeNode(4);
-//        root.left.right = new TreeNode(5);
-//        root.left.left.left = new TreeNode(8);
-        root.left.left.right = new TreeNode(9);
-//        root.right.left = new TreeNode(6);
-//        root.right.right = new TreeNode(7);
+        root.left.right = new TreeNode(5);
+        root.left.left.left = new TreeNode(8);
+//        root.left.left.right = new TreeNode(9);
+        root.right.left = new TreeNode(6);
+        root.right.right = new TreeNode(7);
+        System.out.println("Distance of a node 1 from root: "+binaryTree.pathLengthFromRoot(root, 1));
+        System.out.println("Distance of a node 2 from root: "+binaryTree.pathLengthFromRoot(root, 2));
+        System.out.println("Distance of a node 3 from root: "+binaryTree.pathLengthFromRoot(root, 3));
+        System.out.println("Distance of a node 4 from root: "+binaryTree.pathLengthFromRoot(root, 4));
+        System.out.println("Distance of a node 7 from root: "+binaryTree.pathLengthFromRoot(root, 7));
+        System.out.println("Distance of a node 6 from root: "+binaryTree.pathLengthFromRoot(root, 6));
+        System.out.println("Distance of a node 5 from root: "+binaryTree.pathLengthFromRoot(root, 5));
+        System.out.println("Distance of a node 8 from root: "+binaryTree.pathLengthFromRoot(root, 8));
+
+
+        System.out.println("Find ancestors: "+binaryTree.printAncestors(root, 5));
+        System.out.println("Print level by level: "+binaryTree.printLevelByLevel(root));
+        System.out.println("Print level by level: "+binaryTree.printLevelByLevelEff(root));
         System.out.println("Number of full nodes: "+binaryTree.numberOfFullNodes(root));
         System.out.println("deepest node: "+binaryTree.findDeepest(root).val);
-        System.out.println("Serialize: "+binaryTree.serializeTree(root));
+//        System.out.println("Serialize: "+binaryTree.serializeTree(root));
+//        System.out.println("Restore: "+ binaryTree.restoreTree(binaryTree.serializeTree(root)));
         System.out.println("Number of Half Nodes: "+ binaryTree.numberOfHalfNodes(root));
         System.out.println("Number of Half Nodes Iter: "+ binaryTree.numberOfHalfNodesIter(root));
         System.out.println("Number of Half Nodes XOR: "+ binaryTree.numberOfHalfNodesXOR(root));
         System.out.println("Find Max: "+binaryTree.findMaxItr(root));
+
 //        System.out.println("isBalanced: "+binaryTree.isBalanced(root));
 //        System.out.println("hasPathSum: "+binaryTree.hasPathSum(root, 22));
 //        System.out.println("Max Depth: "+binaryTree.maxDepth(root));
