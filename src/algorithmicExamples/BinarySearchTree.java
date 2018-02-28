@@ -30,16 +30,16 @@ public class BinarySearchTree {
 	public static int diameter(TreeNode root) {
 		if(root != null) {
 
-			System.out.println("Root: "+root.val);
+			System.out.println("Root: "+root.data);
 			int leftH = getHeight(root.left);
 			System.out.println("Left Height: "+leftH);
 			int rightH = getHeight(root.right);
 			System.out.println("Right Height: "+rightH);
 
 			int leftDiameter = diameter(root.left);
-			System.out.println("Left Diameter for Left node: "+root.val+": "+leftDiameter);
+			System.out.println("Left Diameter for Left node: "+root.data +": "+leftDiameter);
 			int rightDiameter = diameter(root.right);
-			System.out.println("Right Diameter for Right node: "+root.val+": "+rightDiameter);
+			System.out.println("Right Diameter for Right node: "+root.data +": "+rightDiameter);
 
 			System.out.println("\n");
 
@@ -68,7 +68,7 @@ public class BinarySearchTree {
 	public void preOrderRec(TreeNode root) {
 		if(root !=  null) {
 			//Visit the node-Printing the node data
-			System.out.printf("%d ", root.val);
+			System.out.printf("%d ", root.data);
 			preOrderRec(root.left);
 			preOrderRec(root.right);
 		}
@@ -79,7 +79,7 @@ public class BinarySearchTree {
 	void inorderRec(TreeNode root) {
 		if (root != null) {
 			inorderRec(root.left);
-			System.out.println(root.val);
+			System.out.println(root.data);
 			inorderRec(root.right);
 		}
 	}
@@ -90,7 +90,7 @@ public class BinarySearchTree {
 			postOrder(root.left);
 			postOrder(root.right);
 			//Visit the node by Printing the node data
-			System.out.printf("%d ", root.val);
+			System.out.printf("%d ", root.data);
 		}
 	}
 
@@ -104,7 +104,7 @@ public class BinarySearchTree {
 
 		while(!stack.empty()){
 			TreeNode n = stack.pop();
-			result.add(n.val);
+			result.add(n.data);
 
 			if(n.right != null){
 				stack.push(n.right);
@@ -133,7 +133,7 @@ public class BinarySearchTree {
 			}
 			if(stack.empty()) break;
 			root = stack.pop(); //pop back left and root.
-			result.add(root.val);
+			result.add(root.data);
 			root = root.right;//add all right nodes
 		}
 
@@ -151,7 +151,7 @@ public class BinarySearchTree {
 			TreeNode n = stack.peek(); //doesnot remove element
 			if(n.left == null && n.right == null) {
 				TreeNode pop = stack.pop();
-				result.add(pop.val);
+				result.add(pop.data);
 			} else {
 				if (n.right != null) {
 					stack.push(n.right);
@@ -173,7 +173,7 @@ public class BinarySearchTree {
 		queue.add(root);
 		while(!queue.isEmpty()) {
 			TreeNode current = queue.poll();
-			System.out.println("Value: " + current.val);
+			System.out.println("Value: " + current.data);
 			if(current.left != null)
 				queue.add(current.left);
 			if(current.right != null)
@@ -193,7 +193,7 @@ public class BinarySearchTree {
 		queue.add(root);
 		while(!queue.isEmpty()) {
 			TreeNode curr = queue.poll();
-			result.add(curr.val);
+			result.add(curr.data);
 			if(curr.left != null)
 				queue.add(curr.left);
 			if(curr.right != null)
@@ -213,9 +213,9 @@ public class BinarySearchTree {
 		}
 
         /* Otherwise, recur down the tree */
-		if (key < root.val)
+		if (key < root.data)
 			root.left = insertRec(root.left, key);
-		else if (key > root.val)
+		else if (key > root.data)
 			root.right = insertRec(root.right, key);
 
         /* return the (unchanged) node pointer */
@@ -225,14 +225,14 @@ public class BinarySearchTree {
 	//search
 	public TreeNode search(TreeNode root, int key) {
 		// Base Cases: root is null or key is present at root
-		if(root == null || root.val == key) {
+		if(root == null || root.data == key) {
 			return root;
 		}
-		// val is greater than root's key
-		if(root.val > key) {
+		// data is greater than root's key
+		if(root.data > key) {
 			return search(root.left, key);
 		}
-		// val is less than root's key
+		// data is less than root's key
 		return search(root.right, key);
 	}
 
@@ -251,12 +251,12 @@ public class BinarySearchTree {
 		}
 
 		// not in range
-		if (root.val <= min || root.val >= max) {
+		if (root.data <= min || root.data >= max) {
 			return false;
 		}
 
-		// left subtree must be < root.val && right subtree must be > root.val
-		return validate(root.left, min, root.val) && validate(root.right, root.val, max);
+		// left subtree must be < root.data && right subtree must be > root.data
+		return validate(root.left, min, root.data) && validate(root.right, root.data, max);
 	}
 
 	public static boolean validateBSTItrEfficient(TreeNode root) {
@@ -279,12 +279,12 @@ public class BinarySearchTree {
 		while(!q.isEmpty()){
 			TreeBoundaryNode tbNode = q.poll();
 			TreeNode t = tbNode.treeNode;
-			if((t.val <= tbNode.leftBoundary) || (t.val >= tbNode.rightBoundary)) return false;
+			if((t.data <= tbNode.leftBoundary) || (t.data >= tbNode.rightBoundary)) return false;
 			if(t.left != null){
-				q.add(new TreeBoundaryNode(t.left, tbNode.leftBoundary, t.val));
+				q.add(new TreeBoundaryNode(t.left, tbNode.leftBoundary, t.data));
 			}
 			if(t.right != null){
-				q.add(new TreeBoundaryNode(t.right, t.val, tbNode.rightBoundary));
+				q.add(new TreeBoundaryNode(t.right, t.data, tbNode.rightBoundary));
 			}
 		}
 
@@ -306,12 +306,12 @@ public class BinarySearchTree {
 
 		while(!leftSubTreeQueue.isEmpty()) {
 			TreeNode current = leftSubTreeQueue.poll();
-			if(current.val > root.val) return false;
+			if(current.data > root.data) return false;
 			if(current.left != null)
 				leftQueue.add(current.left);
 			while(!leftQueue.isEmpty()) {
 				TreeNode subLeftChild = leftQueue.poll();
-				if(subLeftChild.val > current.val || subLeftChild.val > root.val) return false;
+				if(subLeftChild.data > current.data || subLeftChild.data > root.data) return false;
 				if(subLeftChild.left != null)
 					leftQueue.add(subLeftChild.left);
 			}
@@ -320,7 +320,7 @@ public class BinarySearchTree {
 				rightQueue.add(current.right);
 			while(!rightQueue.isEmpty()) {
 				TreeNode subRightChild = rightQueue.poll();
-				if(subRightChild.val <= current.val || subRightChild.val > root.val) return false;
+				if(subRightChild.data <= current.data || subRightChild.data > root.data) return false;
 				if(subRightChild.right != null)
 					rightQueue.add(subRightChild.right);
 			}
@@ -331,12 +331,12 @@ public class BinarySearchTree {
 
 		while(!rightSubTreeQueue.isEmpty()) {
 			TreeNode current = rightSubTreeQueue.poll();
-			if(current.val < root.val) return false;
+			if(current.data < root.data) return false;
 			if(current.left != null)
 				leftQueue.add(current.left);
 			while(!leftQueue.isEmpty()) {
 				TreeNode subLeftChild = leftQueue.poll();
-				if(subLeftChild.val > current.val || subLeftChild.val > root.val) return false;
+				if(subLeftChild.data > current.data || subLeftChild.data > root.data) return false;
 				if(subLeftChild.left != null)
 					leftQueue.add(subLeftChild.left);
 			}
@@ -345,7 +345,7 @@ public class BinarySearchTree {
 				rightQueue.add(current.right);
 			while(!rightQueue.isEmpty()) {
 				TreeNode subRightChild = rightQueue.poll();
-				if(subRightChild.val <= current.val || subRightChild.val > root.val) return false;
+				if(subRightChild.data <= current.data || subRightChild.data > root.data) return false;
 				if(subRightChild.right != null)
 					leftQueue.add(subRightChild.right);
 			}
@@ -444,14 +444,14 @@ public class BinarySearchTree {
 		TreeNode current = root;
 		while(true) {
 			while(current != null) {
-				if (current.val >= a && current.val <= b) {
+				if (current.data >= a && current.data <= b) {
 					stack.push(current);
 					current = current.left;
 				} else break;
 			}
 			if(stack.isEmpty()) break;
 			current = stack.pop();
-			rangeList.add(current.val);
+			rangeList.add(current.data);
 			current = current.right;
 		}
 
@@ -463,15 +463,45 @@ public class BinarySearchTree {
 	public void printRange(TreeNode root, int a, int b) {
 		if(root == null) return;
 
-		if(root.val >= a){
+		if(root.data >= a){
 			printRange(root.left, a, b);
 		}
-		if(a <= root.val && root.val <= b)
-			rangeList.add(root.val);
+		if(a <= root.data && root.data <= b)
+			rangeList.add(root.data);
 
-		if(root.val <= b) {
+		if(root.data <= b) {
 			printRange(root.right, a, b);
 		}
+	}
+
+	/**
+	 * Space: O(log n)
+	 * Time: O(log n)
+	 */
+	public TreeNode delete(TreeNode root, int data) {
+		if(root == null) return null;
+		if(root.data > data) {
+			root.left = delete(root.left, data);
+		} else if(root.data < data){
+			root.right = delete(root.right, data);
+		} else {
+			//case 1: No child, delete node and link to parent
+			if(root.left == null && root.right == null) {
+				root = null;
+				//case 2: one child
+			} else if(root.left == null) {
+				root = root.right;
+			} else if(root.right == null) {
+				root = root.left;
+			} else {
+				//case 3: 2 children
+				TreeNode temp = findMin(root.right);
+				root.data = temp.data;
+				root.right = delete(root.right, temp.data);
+				return root;
+			}
+		}
+		return root;
 	}
 
 	// Driver Program to test above functions
@@ -525,18 +555,20 @@ public class BinarySearchTree {
 		root.left.left.left = new TreeNode(8);
 		root.left.left.left.left = new TreeNode();
 
-		TreeNode root2 = new TreeNode(20);
-		root2.left = new TreeNode(30);
-		root2.left.left = new TreeNode(14);
-		root2.left.right = new TreeNode(18);
-		root2.right = new TreeNode(15);
-		System.out.println("Validate: "+validateBSTItr(root2));
+		TreeNode root2 = new TreeNode(4);
+		root2.left = new TreeNode(2);
+		root2.right = new TreeNode(8);
+		root2.right.right = new TreeNode(10);
+		root2.right.left = new TreeNode(5);
+		System.out.println("Delete: "+tree.delete(root2, 10));
+
+//		System.out.println("Validate: "+validateBSTItr(root2));
 
 		tree.printRange(tree.root, 3 , 10);
 //		TreeNode smallestNode = tree.findKthSmallest(root, 2);
 //		TreeNode largestNode = tree.findKthLargest(root, 2);
-//		System.out.println("Kth Smallest node: "+smallestNode.val);
-//		System.out.println("Kth Largest node: "+largestNode.val);
+//		System.out.println("Kth Smallest node: "+smallestNode.data);
+//		System.out.println("Kth Largest node: "+largestNode.data);
 
 //		System.out.println("Diameter of Tree: " + diameter(root));
 	}
@@ -544,12 +576,12 @@ public class BinarySearchTree {
 }
 
 class TreeNode {
-	int val;
+	int data;
 	TreeNode left;
 	TreeNode right;
 
 	public TreeNode(int x) {
-		val = x;
+		data = x;
 		left = right = null;
 	}
 

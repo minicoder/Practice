@@ -101,8 +101,8 @@ public class BinaryTree {
 
     /**
      * Recursive
-     * Space: O(logN)
      * Time: O(n)
+     * Space: O(logN)
      *
      */
     public boolean isIdentical(TreeNode root1, TreeNode root2) {
@@ -117,6 +117,29 @@ public class BinaryTree {
                         isIdentical(root1.left, root2.left) &&
                         isIdentical(root1.right, root2.right)
         );
+    }
+
+    /**
+     *
+     Write a method to check if the two given binary trees are the mirror images of each other.
+     * Return true if they are, false otherwise.
+     * What's a binary tree's mirror image? Hold it by the root and rotate all other
+     * nodes by 180 degrees!
+     Example:
+                 1              1
+                / \            / \
+               2   3    ==    3   2
+              / \ / \        / \ / \
+             4  5 6  7      7  6 5  4
+     *
+     * Time: O(n)
+     * Space: O(log n)
+     */
+    public boolean isMirror(TreeNode root1, TreeNode root2) {
+        if(root1 == null && root2 == null) return true;
+        if(root1 == null || root2 == null) return false;
+        return (root1.val == root2.val && isMirror(root1.left, root2.right) &&
+                isMirror(root1.right, root2.left));
     }
 
     /*
@@ -580,6 +603,43 @@ public class BinaryTree {
     }
 
     /**
+     * Given a binary tree and two tree nodes, write a method to find
+     LCA
+     (Lowest Common Ancestor) of the two nodes.
+     Example:
+            1
+           / \
+          2   3
+         / \ / \
+        4  5 6  7
+     ==>
+     LCA
+     of 6 and 4 is 1,
+
+     LCA
+     of 4 and 5 is 2.
+
+     Time: O(n)
+     Space: O(logn)
+     */
+    public TreeNode findLCA(TreeNode root, TreeNode a, TreeNode b) {
+        if(root == null) return null;
+        TreeNode leftTemp, rightTemp;
+        if(root == a || root == b) {
+            return root;
+        }
+
+        leftTemp = findLCA(root.left, a, b);
+        rightTemp = findLCA(root.right, a, b);
+
+        if(leftTemp != null && rightTemp == null) return leftTemp;
+        if(rightTemp != null && leftTemp == null) return rightTemp;
+        if(leftTemp == null) return null;
+
+        return root;
+    }
+
+    /**
      * Given a binary tree, write a method to print the tree level by level.
 
      Example:
@@ -692,23 +752,22 @@ public class BinaryTree {
         TreeNode root = new TreeNode(1);
         root.right = new TreeNode(3);
         root.left = new TreeNode(2);
-        root.left.left = new TreeNode(4);
+        TreeNode four = new TreeNode(4);
+        root.left.left = four;
         root.left.right = new TreeNode(5);
-        root.left.left.left = new TreeNode(8);
+//        root.left.left.left = new TreeNode(8);
 //        root.left.left.right = new TreeNode(9);
-        root.right.left = new TreeNode(6);
+        TreeNode six = new TreeNode(6);
+        root.right.left = six;
         root.right.right = new TreeNode(7);
         System.out.println("Distance of a node 1 from root: "+binaryTree.pathLengthFromRoot(root, 1));
         System.out.println("Distance of a node 2 from root: "+binaryTree.pathLengthFromRoot(root, 2));
-        System.out.println("Distance of a node 3 from root: "+binaryTree.pathLengthFromRoot(root, 3));
-        System.out.println("Distance of a node 4 from root: "+binaryTree.pathLengthFromRoot(root, 4));
-        System.out.println("Distance of a node 7 from root: "+binaryTree.pathLengthFromRoot(root, 7));
-        System.out.println("Distance of a node 6 from root: "+binaryTree.pathLengthFromRoot(root, 6));
         System.out.println("Distance of a node 5 from root: "+binaryTree.pathLengthFromRoot(root, 5));
         System.out.println("Distance of a node 8 from root: "+binaryTree.pathLengthFromRoot(root, 8));
 
 
         System.out.println("Find ancestors: "+binaryTree.printAncestors(root, 5));
+        System.out.println("LCA: "+binaryTree.findLCA(root, six, four).val);
         System.out.println("Print level by level: "+binaryTree.printLevelByLevel(root));
         System.out.println("Print level by level: "+binaryTree.printLevelByLevelEff(root));
         System.out.println("Number of full nodes: "+binaryTree.numberOfFullNodes(root));
